@@ -41,7 +41,7 @@ abstract class Model
         $data = [];
 
         foreach ($this->fillable as $item) {
-            $data[':' . $item] =  $params[$item] ?? null;
+            $data[':' . $item] = $params[$item] ?? null;
         }
 
         $this->db->query("INSERT INTO $this->table (" . implode(',', $this->fillable) . ") VALUES (" . implode(',', array_keys($data)) . ")");
@@ -62,13 +62,16 @@ abstract class Model
 
     public function update(int $id, array $params): bool
     {
-        $fields = [];
+        $params = array_filter($params, function ($key) {
+            return in_array($key, $this->fillable);
+        }, ARRAY_FILTER_USE_KEY);
 
+        $fields = [];
         foreach ($params as $key => $value) {
             $fields[] = "$key = :$key";
         }
-
-        $this->db->query("UPDATE $this->table SET " . implode($fields) . " WHERE id = :id");
+//        die("UPDATE $this->table SET " . implode(',', $fields) . " WHERE id = :id");
+        $this->db->query("UPDATE $this->table SET " . implode(',', $fields) . " WHERE id = :id");
         $this->db->bind(':id', $id);
         foreach ($params as $key => $value) {
             $this->db->bind(":$key", $value);

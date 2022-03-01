@@ -11,7 +11,6 @@ class Database
 {
     private ?PDO $dbHandler = null;
     private PDOStatement $stmt;
-    private mixed $error;
 
     public function __construct()
     {
@@ -21,7 +20,6 @@ class Database
             }
 
         } catch (PDOException $e) {
-            $this->error = $e->getMessage();
             throw new $e;
         }
     }

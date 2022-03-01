@@ -9,6 +9,9 @@ class Todo extends Model
 {
     protected string $table = 'todo_items';
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_DONE = 'done';
+
     protected array $fillable = [
         'id',
         'name',

@@ -3,14 +3,23 @@
 namespace Core;
 
 use Exception;
+use JetBrains\PhpStorm\NoReturn;
 
 abstract class Controller
 {
     protected array $routeParams = [];
+    protected Request $request;
 
     public function __construct($routeParams)
     {
         $this->routeParams = $routeParams;
+        $this->request = new Request();
+    }
+
+    #[NoReturn] function redirect($url, $statusCode = 302): void
+    {
+        header('Location: ' . $url, true, $statusCode);
+        die();
     }
 
     /**
@@ -21,20 +30,9 @@ abstract class Controller
         $method = $name;
 
         if (method_exists($this, $method)) {
-            if ($this->before() != false) {
-                call_user_func_array([$this, $method], $args);
-                $this->after();
-            }
+            call_user_func_array([$this, $method], $args);
         } else {
             throw new Exception("Method $method not found in controller " . get_class($this));
         }
-    }
-
-    protected function before()
-    {
-    }
-
-    protected function after()
-    {
     }
 }

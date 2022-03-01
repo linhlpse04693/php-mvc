@@ -11,9 +11,12 @@ class Router
 
     protected array $params = [];
 
-    public function add(string$route, array $params = [])
+    public function add(string $route, array $params = [])
     {
-        if(isset($params['method']) && $_SERVER['REQUEST_METHOD'] !== $params['method']){
+        if (isset($_POST['_method']) && $_POST['_method'] != $params['method']) {
+            return;
+        }
+        if (isset($params['method']) && !isset($_POST['_method']) && $_SERVER['REQUEST_METHOD'] !== $params['method']) {
             return;
         }
 
@@ -65,7 +68,6 @@ class Router
 
                 if (preg_match('/action$/i', $action) == 0) {
                     $controllerObject->$action();
-
                 } else {
                     throw new Exception("Method $action in controller $controller cannot be called directly - remove the Action suffix to call this method");
                 }

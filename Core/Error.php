@@ -4,7 +4,9 @@ namespace Core;
 
 use App\Config;
 use ErrorException;
-use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class Error
 {
@@ -19,6 +21,11 @@ class Error
         }
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public static function exceptionHandler(mixed $exception)
     {
         $code = $exception->getCode();
@@ -44,7 +51,7 @@ class Error
 
             error_log($message);
 
-            View::renderTemplate("$code.html");
+            View::renderTemplate("$code.twig");
         }
     }
 }

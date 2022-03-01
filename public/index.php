@@ -12,5 +12,8 @@ $router = new Core\Router();
 $router->add('todos', ['controller' => 'TodoController', 'action' => 'index', 'method' => 'GET']);
 $router->add('todos/create', ['controller' => 'TodoController', 'action' => 'create', 'method' => 'GET']);
 $router->add('todos', ['controller' => 'TodoController', 'action' => 'store', 'method' => 'POST']);
+$router->add('todos/{id:\d+}/edit', ['controller' => 'TodoController', 'action' => 'edit', 'method' => 'GET']);
+$router->add('todos/{id:\d+}', ['controller' => 'TodoController', 'action' => 'update', 'method' => 'PUT']);
+$router->add('todos/{id:\d+}', ['controller' => 'TodoController', 'action' => 'delete', 'method' => 'DELETE']);
 
 $router->dispatch($_SERVER['QUERY_STRING']);
